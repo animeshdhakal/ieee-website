@@ -1,7 +1,19 @@
 import React from "react";
+import type { Metadata } from "next";
 import { getAllEvents } from "@/lib/events";
 import EventList from "@/components/event-list";
 import { IeeeEvent, EventCategory } from "@/types";
+
+export const metadata: Metadata = {
+    title: "Events",
+    description:
+        "Discover upcoming and past workshops, seminars, hackathons, and networking events from IEEE Pulchowk Student Branch.",
+    openGraph: {
+        title: "Events | IEEE Pulchowk Student Branch",
+        description:
+            "Discover upcoming and past workshops, seminars, hackathons, and networking events from IEEE Pulchowk Student Branch.",
+    },
+};
 
 export default function EventsPage() {
     const events = getAllEvents([

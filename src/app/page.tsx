@@ -1,10 +1,22 @@
 import React from "react";
+import type { Metadata } from "next";
 import HomeHero from "@/components/home-hero";
 import HomeAbout from "@/components/home-about";
 import HomeEvents from "@/components/home-events";
 import HomeCTA from "@/components/home-cta";
 import { getAllEvents } from "@/lib/events";
 import { IeeeEvent, EventCategory } from "@/types";
+
+export const metadata: Metadata = {
+    title: "IEEE Pulchowk Student Branch | Advancing Technology for Humanity",
+    description:
+        "Official website of IEEE Pulchowk Student Branch at IOE Pulchowk Campus. Join workshops, seminars, hackathons, and connect with a community of tech enthusiasts in Nepal.",
+    openGraph: {
+        title: "IEEE Pulchowk Student Branch | Advancing Technology for Humanity",
+        description:
+            "Join workshops, seminars, hackathons, and connect with a community of tech enthusiasts at IOE Pulchowk Campus, Nepal.",
+    },
+};
 
 export default function Home() {
     const events = getAllEvents([

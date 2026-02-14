@@ -1,7 +1,19 @@
 import React from "react";
+import type { Metadata } from "next";
 import { getAllPosts } from "@/lib/blogs";
 import BlogList from "@/components/blog-list";
 import { BlogPost } from "@/types";
+
+export const metadata: Metadata = {
+    title: "Blog",
+    description:
+        "Articles, research highlights, and stories from the IEEE Pulchowk Student Branch community.",
+    openGraph: {
+        title: "Blog | IEEE Pulchowk Student Branch",
+        description:
+            "Articles, research highlights, and stories from the IEEE Pulchowk Student Branch community.",
+    },
+};
 
 export default function BlogsPage() {
     const posts = getAllPosts([
