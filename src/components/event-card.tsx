@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { Calendar, MapPin, ArrowRight } from "lucide-react";
 import { IeeeEvent } from "@/types";
 
@@ -8,7 +9,10 @@ interface EventCardProps {
 
 const EventCard: React.FC<EventCardProps> = ({ event }) => {
     return (
-        <div className="flex flex-col h-full bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 group">
+        <Link
+            href={`/events/${event.id}`}
+            className="flex flex-col h-full bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 group"
+        >
             {/* Image area */}
             <div className="h-48 bg-gray-100 relative overflow-hidden">
                 {event.imageUrl ? (
@@ -54,25 +58,12 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
                 </p>
 
                 <div className="mt-auto">
-                    {event.isUpcoming && event.registrationUrl ? (
-                        <a
-                            href={event.registrationUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center text-sm font-semibold text-ieee-blue hover:text-ieee-dark transition-colors group-hover:translate-x-1 duration-300"
-                        >
-                            Register Now{" "}
-                            <ArrowRight size={16} className="ml-1" />
-                        </a>
-                    ) : (
-                        <span className="inline-flex items-center text-sm font-semibold text-ieee-blue hover:text-ieee-dark transition-colors group-hover:translate-x-1 duration-300">
-                            {event.isUpcoming ? "Register Now" : "View Details"}{" "}
-                            <ArrowRight size={16} className="ml-1" />
-                        </span>
-                    )}
+                    <span className="inline-flex items-center text-sm font-semibold text-ieee-blue hover:text-ieee-dark transition-colors group-hover:translate-x-1 duration-300">
+                        View Details <ArrowRight size={16} className="ml-1" />
+                    </span>
                 </div>
             </div>
-        </div>
+        </Link>
     );
 };
 
