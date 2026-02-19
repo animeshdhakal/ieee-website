@@ -86,7 +86,7 @@ export const TEAM_DATA: Record<string, TeamData> = {
                     },
                     {
                         id: "ac2",
-                        name: "Adhish Poudel",
+                        name: "Adhish Paudel",
                         role: "Executive Member",
                         imageUrl: "/committee/2026/adhish-poudel.png",
                         linkedin:
