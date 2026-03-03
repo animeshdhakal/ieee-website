@@ -134,6 +134,20 @@ const ParticleField = () => {
 };
 
 const ThreeBackground: React.FC<{ className?: string }> = ({ className }) => {
+  const [mounted, setMounted] = React.useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div
+        className={`absolute inset-0 z-0 h-full w-full bg-ieee-dark ${className}`}
+      />
+    );
+  }
+
   return (
     <div
       className={`absolute inset-0 z-0 h-full w-full pointer-events-auto ${className}`}
