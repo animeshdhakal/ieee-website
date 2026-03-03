@@ -6,7 +6,7 @@ author: "Animesh Dhakal"
 authorRole: "Webmaster"
 category: "Technology"
 readTime: "5 min read"
-thumbnail: "https://scontent.fktm10-1.fna.fbcdn.net/v/t39.30808-6/493316640_1369745171274970_4940267653333777278_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=NMVgTi8mW2kQ7kNvwH4Zr1A&_nc_oc=Adlz_ktRskRdTAA7SxDz6tOc23394AKsOTAphMR0nYF5hURKb_znXAC3yxAqKNY7uRPtOiBpbz7aWiSdNByrwVs-&_nc_zt=23&_nc_ht=scontent.fktm10-1.fna&_nc_gid=-lOv8OXimHH5ALvKDNSIlQ&oh=00_Afs4-Klw-zAAIndcNgzkLPW0WEzgOK2KOkw5QHxyaMB_8w&oe=6995BD2E"
+thumbnail: "/blogs/website-launch-logo.jpg"
 ---
 
 We are thrilled to announce a major milestone for our community: the official launch of the **IEEE Pulchowk Student Branch Website!**
