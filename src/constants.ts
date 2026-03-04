@@ -67,8 +67,8 @@ export const TEAM_DATA: Record<string, TeamData> = {
         role: "Webmaster",
         imageUrl: "/committee/2026/animesh-dhakal.png",
         linkedin: "https://www.linkedin.com/in/animeshdhakal/",
-        imageScale: 1.4,
-        imageOffset: 25,
+        imageScale: 1.3,
+        imageOffset: 10,
       },
     ],
     seniorExecs: [
