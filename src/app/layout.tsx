@@ -6,7 +6,7 @@ import Footer from "@/components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const SITE_URL = "https://ieeepsb.org";
+const SITE_URL = "https://ieee.pcampus.edu.np";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -64,6 +64,9 @@ export const metadata: Metadata = {
     description:
       "Workshops, seminars, competitions, and a community advancing technology for humanity at IOE Pulchowk Campus.",
     images: ["/logo-blue.svg"],
+  },
+   verification: {
+    google: "X6ShvZOcfqfxpeVL5m_hwtHIsuh3U6r_SuXCKcJdlHc",
   },
 };
 
