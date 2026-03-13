@@ -1,12 +1,12 @@
 ---
 title: "Stemfluence 2.0"
-date: "Oct 25, 2024"
-location: "CIT Hall, Pulchowk Campus"
+date: "Jan 31, 2026"
+location: "Shivapuri Secondary School, Kathmandu"
 category: "Workshop"
 isUpcoming: false
 registrationUrl: "#"
 description: "An interactive outreach workshop introducing young students to the basics of electronics and engineering through hands-on learning."
-thumbnail: "https://media.licdn.com/dms/image/v2/D5622AQGWr6VK2gGtlg/feedshare-shrink_1280/B56Zv7No5YJIAg-/0/1769446215465?e=1772668800&v=beta&t=li_qOONVE7qsCfgLrDdm5hWGEye-zrA1DBZN6oGbs7I"
+thumbnail: "/events/stemfluence-2.0.jpeg"
 ---
 
 **Stemfluence 2.0** was successfully organized by the IEEE Nepal Section in collaboration with the IEEE Student Branch, IEEE Computer Society Student Branch Chapter, and the WIE of Pulchowk Campus, Tribhuvan University. The event aimed to spark early interest in electronics and engineering among young learners.
