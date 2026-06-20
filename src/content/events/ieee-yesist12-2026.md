@@ -3,7 +3,7 @@ title: "IEEE YESIST12 2026 | Pilot Gateway"
 date: "Mar 15, 2026"
 location: "Online/Global"
 category: "Competition"
-isUpcoming: true
+isUpcoming: false
 registrationUrl: "https://portal.ieeeyesist12.org/link/iepc"
 description: "Call for Abstracts is now OPEN! Join innovators and change-makers in the Innovation Challenge or WePOWER Track."
 thumbnail: "/events/yesist12-2026.png"

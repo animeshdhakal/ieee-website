@@ -45,6 +45,10 @@ export function getAllEvents(fields: string[] = []) {
     const events = slugs
         .map((slug) => getEventBySlug(slug, fields))
         // sort events by date in descending order
-        .sort((event1, event2) => (event1.date > event2.date ? -1 : 1));
+        .sort((event1, event2) => {
+            const date1 = new Date(event1.date as string).getTime();
+            const date2 = new Date(event2.date as string).getTime();
+            return date1 > date2 ? -1 : 1;
+        });
     return events;
 }
