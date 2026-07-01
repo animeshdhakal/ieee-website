@@ -97,7 +97,7 @@ export function TeamMemberForm({ member }: { member?: TeamMemberRecord }) {
           </div>
         )}
 
-        <div className="md:col-span-2">
+        <div>
           <label htmlFor="linkedin" className={labelClass}>
             LinkedIn URL
           </label>
@@ -108,6 +108,34 @@ export function TeamMemberForm({ member }: { member?: TeamMemberRecord }) {
             defaultValue={member?.linkedin ?? ""}
             className={inputClass}
             placeholder="https://www.linkedin.com/in/…"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="github" className={labelClass}>
+            GitHub URL
+          </label>
+          <input
+            id="github"
+            name="github"
+            type="text"
+            defaultValue={member?.github ?? ""}
+            className={inputClass}
+            placeholder="https://github.com/…"
+          />
+        </div>
+
+        <div className="md:col-span-2">
+          <label htmlFor="instagram" className={labelClass}>
+            Instagram URL
+          </label>
+          <input
+            id="instagram"
+            name="instagram"
+            type="text"
+            defaultValue={member?.instagram ?? ""}
+            className={inputClass}
+            placeholder="https://www.instagram.com/…"
           />
         </div>
 

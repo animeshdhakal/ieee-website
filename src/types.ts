@@ -4,6 +4,8 @@ export interface TeamMember {
   role: string;
   imageUrl?: string;
   linkedin?: string;
+  github?: string;
+  instagram?: string;
   imagePosition?: string;
   imageScale?: number;
   imageOffset?: number;

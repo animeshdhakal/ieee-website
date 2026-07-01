@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Clock, User } from "lucide-react";
 import { BlogPost } from "@/types";
 
@@ -14,10 +15,12 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, featured = false }) => {
       <div className="group relative grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-8 bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
         <div className="h-64 md:h-full bg-gray-100 relative overflow-hidden">
           {post.imageUrl ? (
-            <img
+            <Image
               src={post.imageUrl}
               alt={post.title}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-ieee-blue to-ieee-dark flex items-center justify-center">
@@ -68,10 +71,12 @@ const BlogCard: React.FC<BlogCardProps> = ({ post, featured = false }) => {
     <div className="group bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col h-full">
       <div className="h-48 bg-gray-100 relative overflow-hidden">
         {post.imageUrl ? (
-          <img
+          <Image
             src={post.imageUrl}
             alt={post.title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200" />

@@ -40,6 +40,8 @@ export const teamMembers = pgTable("team_members", {
   role: text("role").notNull(),
   imageUrl: text("image_url"),
   linkedin: text("linkedin"),
+  github: text("github"),
+  instagram: text("instagram"),
   imagePosition: text("image_position"),
   imageScale: doublePrecision("image_scale"),
   imageOffset: integer("image_offset"),

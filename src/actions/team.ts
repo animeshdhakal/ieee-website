@@ -36,6 +36,8 @@ export async function createTeamMember(
   const role = (formData.get("role") as string)?.trim();
   const imageUrl = (formData.get("imageUrl") as string)?.trim() || null;
   const linkedin = (formData.get("linkedin") as string)?.trim() || null;
+  const github = (formData.get("github") as string)?.trim() || null;
+  const instagram = (formData.get("instagram") as string)?.trim() || null;
 
   if (!year) return { error: "Year is required." };
   if (!TEAM_SECTIONS.includes(section)) return { error: "A valid section is required." };
@@ -60,6 +62,8 @@ export async function createTeamMember(
       role,
       imageUrl,
       linkedin,
+      github,
+      instagram,
       imageScale: parseNum(formData.get("imageScale")),
       imageOffset: parseNum(formData.get("imageOffset")),
       imagePosition: (formData.get("imagePosition") as string)?.trim() || null,
@@ -90,6 +94,8 @@ export async function updateTeamMember(
   const role = (formData.get("role") as string)?.trim();
   const imageUrl = (formData.get("imageUrl") as string)?.trim() || null;
   const linkedin = (formData.get("linkedin") as string)?.trim() || null;
+  const github = (formData.get("github") as string)?.trim() || null;
+  const instagram = (formData.get("instagram") as string)?.trim() || null;
 
   if (!year) return { error: "Year is required." };
   if (!TEAM_SECTIONS.includes(section)) return { error: "A valid section is required." };
@@ -110,6 +116,8 @@ export async function updateTeamMember(
         role,
         imageUrl,
         linkedin,
+      github,
+      instagram,
         imageScale: parseNum(formData.get("imageScale")),
         imageOffset: parseNum(formData.get("imageOffset")),
         imagePosition: (formData.get("imagePosition") as string)?.trim() || null,

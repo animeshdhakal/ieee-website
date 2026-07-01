@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Calendar, MapPin, ArrowRight } from "lucide-react";
 import { IeeeEvent } from "@/types";
 
@@ -16,10 +17,12 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
             {/* Image area */}
             <div className="h-48 bg-gray-100 relative overflow-hidden">
                 {event.imageUrl ? (
-                    <img
+                    <Image
                         src={event.imageUrl}
                         alt={event.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                 ) : (
                     <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200">
