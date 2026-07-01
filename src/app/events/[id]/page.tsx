@@ -33,12 +33,7 @@ export async function generateMetadata({
     };
 }
 
-export async function generateStaticParams() {
-    const events = await getAllEvents(["slug"]);
-    return events.map((event) => ({
-        id: event.slug,
-    }));
-}
+export const dynamic = "force-dynamic";
 
 export default async function EventPage({
     params,

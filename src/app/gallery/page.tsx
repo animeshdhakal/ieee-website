@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getAllGalleryItems } from "@/lib/gallery";
 import { GalleryView } from "@/components/GalleryView";
 

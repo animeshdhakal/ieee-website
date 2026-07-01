@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getAllGalleryItems } from "@/lib/gallery";
 import { GalleryForm } from "@/components/admin/GalleryForm";
 import { DeleteGalleryButton } from "@/components/admin/DeleteGalleryButton";

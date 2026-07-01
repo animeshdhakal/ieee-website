@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import { Pencil } from "lucide-react";
 import { getAllTeamMembers, type TeamMemberRecord } from "@/lib/team";

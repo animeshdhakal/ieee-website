@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getTeamData } from "@/lib/team";
 import { TeamView } from "@/components/TeamView";
 

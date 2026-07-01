@@ -31,12 +31,7 @@ export async function generateMetadata({
     };
 }
 
-export async function generateStaticParams() {
-    const posts = await getAllPosts(["slug"]);
-    return posts.map((post) => ({
-        id: post.slug,
-    }));
-}
+export const dynamic = "force-dynamic";
 
 export default async function BlogPostPage({
     params,
