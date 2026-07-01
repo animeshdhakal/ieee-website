@@ -9,7 +9,13 @@ import ThreeBackground from "@/components/three-background";
 const HomeHero: React.FC = () => {
     return (
         <section className="relative h-[100vh] flex items-center justify-center overflow-hidden bg-ieee-dark">
-            <ThreeBackground className="opacity-40" />
+            {/* Vibrant animated aurora glows behind the particle field */}
+            <div className="absolute inset-0 z-0 pointer-events-none">
+                <div className="absolute -top-1/4 left-1/5 h-[38rem] w-[38rem] rounded-full bg-blue-600/30 blur-[130px] animate-aurora" />
+                <div className="absolute top-1/3 right-1/6 h-[34rem] w-[34rem] rounded-full bg-cyan-400/25 blur-[130px] animate-aurora-slow [animation-delay:-6s]" />
+                <div className="absolute bottom-0 left-1/3 h-[30rem] w-[30rem] rounded-full bg-violet-600/25 blur-[130px] animate-aurora [animation-delay:-11s]" />
+            </div>
+            <ThreeBackground className="opacity-60" />
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-ieee-dark/20 to-ieee-dark/90 pointer-events-none"></div>
 
             <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -18,9 +24,10 @@ const HomeHero: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
                 >
-                    <div className="inline-block mb-4 px-4 py-1.5 rounded-full border border-blue-400/30 bg-blue-900/30 backdrop-blur-md">
-                        <span className="text-blue-200 text-xs font-medium tracking-widest uppercase">
-                            IEEE Pulchowk Student Branch
+                    <div className="inline-flex items-center gap-2.5 mb-6 text-blue-200/90">
+                        <span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
+                        <span className="text-sm font-medium tracking-wide">
+                            IEEE Student Branch · Pulchowk Campus, Lalitpur
                         </span>
                     </div>
                     <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight leading-tight mb-6">
@@ -31,8 +38,9 @@ const HomeHero: React.FC = () => {
                         </span>
                     </h1>
                     <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
-                        Connecting students, professionals, and visionaries to
-                        foster technological innovation and excellence in Nepal.
+                        A student-run branch at IOE Pulchowk Campus, where
+                        curious engineers come together to build projects, run
+                        workshops, and learn by doing.
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

@@ -7,6 +7,20 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter);
+  --animate-aurora: aurora 16s ease-in-out infinite;
+  --animate-aurora-slow: aurora 24s ease-in-out infinite;
+}
+
+@keyframes aurora {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate3d(5%, -7%, 0) scale(1.2);
+    opacity: 0.9;
+  }
 }
 
 :root {

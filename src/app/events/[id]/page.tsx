@@ -11,7 +11,13 @@ export async function generateMetadata({
     params: Promise<{ id: string }>;
 }): Promise<Metadata> {
     const { id } = await params;
-    const event = getEventBySlug(id, ["title", "description", "thumbnail"]);
+    const event = await getEventBySlug(id, ["title", "description", "thumbnail"]);
+
+    if (!event) {
+        return {
+            title: "Event Not Found",
+        };
+    }
 
     return {
         title: event.title as string,
@@ -28,7 +34,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-    const events = getAllEvents(["slug"]);
+    const events = await getAllEvents(["slug"]);
     return events.map((event) => ({
         id: event.slug,
     }));
@@ -40,7 +46,7 @@ export default async function EventPage({
     params: Promise<{ id: string }>;
 }) {
     const { id } = await params;
-    const eventData = getEventBySlug(id, [
+    const eventData = await getEventBySlug(id, [
         "title",
         "date",
         "slug",
@@ -53,7 +59,7 @@ export default async function EventPage({
         "content",
     ]);
 
-    if (!eventData.slug) {
+    if (!eventData) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <div className="text-center">
@@ -71,7 +77,7 @@ export default async function EventPage({
         );
     }
 
-    const allEvents = getAllEvents([
+    const allEvents = await getAllEvents([
         "slug",
         "title",
         "category",
@@ -143,6 +149,7 @@ export default async function EventPage({
                 </div>
             </div>
 
+            {/* Event Content Container */}
             <div className="max-w-3xl mx-auto px-4 sm:px-6">
                 {eventData.thumbnail && (
                     <div className="mb-12 rounded-xl overflow-hidden shadow-lg">
@@ -154,10 +161,14 @@ export default async function EventPage({
                     </div>
                 )}
 
-                <div className="prose prose-lg prose-blue max-w-none text-gray-700 leading-relaxed">
+                <div className="prose prose-lg prose-blue max-w-none text-gray-700 leading-relaxed mb-12">
                     <ReactMarkdown>{eventData.content as string}</ReactMarkdown>
                 </div>
+            </div>
 
+
+            {/* Related Events */}
+            <div className="max-w-3xl mx-auto px-4 sm:px-6">
                 {relatedEvents.length > 0 && (
                     <div className="mt-16 pt-10 border-t border-gray-100">
                         <h3 className="text-lg font-bold text-gray-900 mb-6">

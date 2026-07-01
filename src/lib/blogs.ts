@@ -1,50 +1,55 @@
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
+import { db } from "@/db";
+import { blogs } from "@/db/schema";
+import { eq, desc } from "drizzle-orm";
 
-const postsDirectory = path.join(process.cwd(), "src/content/blogs");
-
-export function getPostSlugs() {
-    return fs.readdirSync(postsDirectory);
+export async function getPostSlugs() {
+  const result = await db.select({ slug: blogs.slug }).from(blogs);
+  return result.map(row => row.slug);
 }
 
-export function getPostBySlug(slug: string, fields: string[] = []) {
-    const realSlug = slug.replace(/\.md$/, "");
-    const fullPath = path.join(postsDirectory, `${realSlug}.md`);
-    const fileContents = fs.readFileSync(fullPath, "utf8");
-    const { data, content } = matter(fileContents);
+export async function getPostBySlug(slug: string, fields: string[] = []) {
+  const [post] = await db.select().from(blogs).where(eq(blogs.slug, slug));
+  
+  if (!post) return null;
 
-    type Items = {
-        [key: string]: string;
-    };
+  type Items = Record<string, any>;
+  const items: Items = {};
 
-    const items: Items = {};
+  if (fields.length === 0) {
+    return post;
+  }
 
-    // Ensure minimal required fields
-    items["slug"] = realSlug;
-    items["content"] = content;
+  items["slug"] = post.slug;
+  items["content"] = post.content;
 
+  fields.forEach((field) => {
+    if (field in post) {
+      items[field] = post[field as keyof typeof post];
+    }
+  });
+
+  return items;
+}
+
+export async function getAllPosts(fields: string[] = []) {
+  const allPosts = await db.select().from(blogs);
+  
+  const sortedPosts = allPosts.sort((post1, post2) => {
+    const date1 = new Date(post1.date).getTime();
+    const date2 = new Date(post2.date).getTime();
+    return date1 > date2 ? -1 : 1;
+  });
+
+  return sortedPosts.map(post => {
+    const items: Record<string, any> = {};
+    if (fields.length === 0) return post;
+    
     fields.forEach((field) => {
-        if (field === "slug") {
-            items[field] = realSlug;
-        }
-        if (field === "content") {
-            items[field] = content;
-        }
-
-        if (typeof data[field] !== "undefined") {
-            items[field] = data[field];
-        }
+      if (field in post) {
+        items[field] = post[field as keyof typeof post];
+      }
     });
-
+    items["slug"] = post.slug;
     return items;
-}
-
-export function getAllPosts(fields: string[] = []) {
-    const slugs = getPostSlugs();
-    const posts = slugs
-        .map((slug) => getPostBySlug(slug, fields))
-        // sort posts by date in descending order
-        .sort((post1, post2) => (post1.date > post2.date ? -1 : 1));
-    return posts;
+  });
 }

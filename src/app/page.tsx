@@ -18,8 +18,8 @@ export const metadata: Metadata = {
     },
 };
 
-export default function Home() {
-    const events = getAllEvents([
+export default async function Home() {
+    const events = await getAllEvents([
         "slug",
         "title",
         "date",

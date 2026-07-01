@@ -15,8 +15,8 @@ export const metadata: Metadata = {
     },
 };
 
-export default function BlogsPage() {
-    const posts = getAllPosts([
+export default async function BlogsPage() {
+    const posts = await getAllPosts([
         "slug",
         "title",
         "excerpt",

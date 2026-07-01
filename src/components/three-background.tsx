@@ -17,8 +17,14 @@ const ParticleField = () => {
     const colors = new Float32Array(count * 3);
     const initialPositions = new Float32Array(count * 3);
 
-    const color1 = new THREE.Color("#00629B"); // IEEE Blue
-    const color2 = new THREE.Color("#00B5E2"); // Cyan/Teal
+    // Vibrant multi-stop palette: electric blue -> cyan -> violet
+    const palette = [
+      new THREE.Color("#2563eb"), // electric blue
+      new THREE.Color("#22d3ee"), // cyan
+      new THREE.Color("#38bdf8"), // sky
+      new THREE.Color("#818cf8"), // indigo
+      new THREE.Color("#a855f7"), // violet accent
+    ];
 
     for (let i = 0; i < count; i++) {
       // Create a spread that covers the screen but has depth
@@ -34,8 +40,12 @@ const ParticleField = () => {
       initialPositions[i * 3 + 1] = y;
       initialPositions[i * 3 + 2] = z;
 
-      // Colors
-      const mixedColor = color1.clone().lerp(color2, Math.random());
+      // Colors: interpolate across the palette for a rich gradient spread
+      const t = Math.random() * (palette.length - 1);
+      const idx = Math.floor(t);
+      const mixedColor = palette[idx]
+        .clone()
+        .lerp(palette[Math.min(idx + 1, palette.length - 1)], t - idx);
       colors[i * 3] = mixedColor.r;
       colors[i * 3 + 1] = mixedColor.g;
       colors[i * 3 + 2] = mixedColor.b;
@@ -121,10 +131,10 @@ const ParticleField = () => {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.05}
+        size={0.035}
         vertexColors
         transparent
-        opacity={0.8}
+        opacity={0.95}
         sizeAttenuation
         depthWrite={false}
         blending={THREE.AdditiveBlending}

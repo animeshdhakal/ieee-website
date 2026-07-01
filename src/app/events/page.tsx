@@ -15,8 +15,8 @@ export const metadata: Metadata = {
     },
 };
 
-export default function EventsPage() {
-    const events = getAllEvents([
+export default async function EventsPage() {
+    const events = await getAllEvents([
         "slug",
         "title",
         "date",

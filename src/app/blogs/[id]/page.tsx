@@ -11,7 +11,11 @@ export async function generateMetadata({
     params: Promise<{ id: string }>;
 }): Promise<Metadata> {
     const { id } = await params;
-    const post = getPostBySlug(id, ["title", "excerpt", "thumbnail"]);
+    const post = await getPostBySlug(id, ["title", "excerpt", "thumbnail"]);
+
+    if (!post) {
+        return { title: "Blog Not Found" };
+    }
 
     return {
         title: post.title as string,
@@ -28,7 +32,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-    const posts = getAllPosts(["slug"]);
+    const posts = await getAllPosts(["slug"]);
     return posts.map((post) => ({
         id: post.slug,
     }));
@@ -40,19 +44,19 @@ export default async function BlogPostPage({
     params: Promise<{ id: string }>;
 }) {
     const { id } = await params;
-    const postData = getPostBySlug(id, [
+    const postData = await getPostBySlug(id, [
         "title",
         "date",
         "slug",
         "author",
         "authorRole",
         "content",
-        "imageUrl",
+        "thumbnail",
         "category",
         "readTime",
     ]);
 
-    if (!postData.slug) {
+    if (!postData) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <div className="text-center">
@@ -71,7 +75,7 @@ export default async function BlogPostPage({
     }
 
     // Fetch related posts for sidebar/bottom
-    const allPosts = getAllPosts(["slug", "title", "category", "excerpt"]);
+    const allPosts = await getAllPosts(["slug", "title", "category", "excerpt"]);
     const relatedPosts = allPosts.filter((p) => p.slug !== id).slice(0, 2);
 
     return (
@@ -126,10 +130,10 @@ export default async function BlogPostPage({
 
             {/* Main Content */}
             <div className="max-w-3xl mx-auto px-4 sm:px-6">
-                {postData.imageUrl && (
+                {postData.thumbnail && (
                     <div className="mb-12 rounded-xl overflow-hidden shadow-lg">
                         <img
-                            src={postData.imageUrl}
+                            src={postData.thumbnail}
                             alt={postData.title}
                             className="w-full h-auto"
                         />
