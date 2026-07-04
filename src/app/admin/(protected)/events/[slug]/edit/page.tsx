@@ -47,7 +47,7 @@ export default async function EditEventPage({
         defaults={{
           slug: event.slug,
           title: event.title,
-          date: toDateInput(event.date),
+          dates: event.dates ? event.dates.map(toDateInput) : [],
           category: event.category ?? "",
           location: event.location,
           description: event.description,

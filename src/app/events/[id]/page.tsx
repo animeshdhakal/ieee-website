@@ -43,7 +43,7 @@ export default async function EventPage({
     const { id } = await params;
     const eventData = await getEventBySlug(id, [
         "title",
-        "date",
+        "dates",
         "slug",
         "location",
         "category",
@@ -76,7 +76,7 @@ export default async function EventPage({
         "slug",
         "title",
         "category",
-        "date",
+        "dates",
         "description",
     ]);
     const relatedEvents = allEvents.filter((e) => e.slug !== id).slice(0, 2);
@@ -122,7 +122,7 @@ export default async function EventPage({
                                 size={16}
                                 className="mr-2 text-ieee-blue"
                             />
-                            {eventData.date}
+                            {(eventData.dates as string[])?.join(", ") || "No dates"}
                         </div>
                         <div className="flex items-center">
                             <MapPin size={16} className="mr-2 text-ieee-blue" />

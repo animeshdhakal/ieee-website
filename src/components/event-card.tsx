@@ -42,7 +42,7 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
                 <div className="flex items-center text-xs text-gray-500 mb-3 space-x-3">
                     <div className="flex items-center">
                         <Calendar size={14} className="mr-1.5" />
-                        {event.date}
+                        {event.dates?.join(", ") || "No date"}
                     </div>
                     <div className="flex items-center">
                         <MapPin size={14} className="mr-1.5" />

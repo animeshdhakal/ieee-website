@@ -26,7 +26,7 @@ export enum EventCategory {
 export interface IeeeEvent {
   id: string;
   title: string;
-  date: string;
+  dates: string[];
   description: string;
   location: string;
   category: EventCategory;

@@ -12,7 +12,7 @@ const CATEGORIES = ["Workshop", "Seminar", "Competition", "Social"];
 export type EventDefaults = {
   slug?: string;
   title?: string;
-  date?: string; // yyyy-MM-dd for the date input
+  dates?: string[]; // array of yyyy-MM-dd
   category?: string;
   location?: string | null;
   description?: string | null;
@@ -39,6 +39,7 @@ export function EventForm({ action, mode, defaults = {} }: Props) {
   const [state, formAction, isPending] = useActionState(action, null);
   const [slug, setSlug] = useState(defaults.slug ?? "");
   const [slugTouched, setSlugTouched] = useState(mode === "edit");
+  const [dates, setDates] = useState<string[]>(defaults.dates?.length ? defaults.dates : [""]);
 
   function handleTitleChange(value: string) {
     if (mode === "create" && !slugTouched) {
@@ -50,6 +51,24 @@ export function EventForm({ action, mode, defaults = {} }: Props) {
           .replace(/^-+|-+$/g, "")
       );
     }
+  }
+
+  function addDate() {
+    setDates([...dates, ""]);
+  }
+
+  function removeDate(index: number) {
+    if (dates.length > 1) {
+      const newDates = [...dates];
+      newDates.splice(index, 1);
+      setDates(newDates);
+    }
+  }
+
+  function updateDate(index: number, value: string) {
+    const newDates = [...dates];
+    newDates[index] = value;
+    setDates(newDates);
   }
 
   return (
@@ -107,18 +126,40 @@ export function EventForm({ action, mode, defaults = {} }: Props) {
             </p>
           </div>
 
-          <div>
-            <label htmlFor="date" className={labelClass}>
-              Date <span className="text-red-500">*</span>
+          <div className="col-span-1 md:col-span-2">
+            <label className={labelClass}>
+              Dates <span className="text-red-500">*</span>
             </label>
-            <input
-              id="date"
-              name="date"
-              type="date"
-              required
-              defaultValue={defaults.date}
-              className={inputClass}
-            />
+            <div className="space-y-2">
+              {dates.map((d, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <input
+                    name="dates"
+                    type="date"
+                    required
+                    value={d}
+                    onChange={(e) => updateDate(i, e.target.value)}
+                    className={inputClass}
+                  />
+                  {dates.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeDate(i)}
+                      className="px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors border border-transparent"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={addDate}
+              className="mt-2 text-sm text-ieee-blue hover:underline font-medium"
+            >
+              + Add another date
+            </button>
           </div>
 
           <div>

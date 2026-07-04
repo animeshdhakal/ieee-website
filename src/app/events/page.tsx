@@ -21,7 +21,7 @@ export default async function EventsPage() {
     const events = await getAllEvents([
         "slug",
         "title",
-        "date",
+        "dates",
         "location",
         "description",
         "category",
@@ -33,7 +33,7 @@ export default async function EventsPage() {
     const formattedEvents: IeeeEvent[] = events.map((event) => ({
         id: event.slug as string,
         title: event.title as string,
-        date: event.date as string,
+        dates: event.dates as string[],
         location: event.location as string,
         description: event.description as string,
         category: event.category as EventCategory,

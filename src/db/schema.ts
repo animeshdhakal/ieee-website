@@ -5,7 +5,7 @@ export const events = pgTable("events", {
   id: serial("id").primaryKey(),
   slug: text("slug").notNull().unique(),
   title: text("title").notNull(),
-  date: text("date").notNull(),
+  dates: jsonb("dates").$type<string[]>().notNull().default([]),
   location: text("location"),
   category: text("category"),
   isUpcoming: boolean("is_upcoming").default(false),

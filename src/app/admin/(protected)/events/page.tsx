@@ -57,7 +57,7 @@ export default async function ManageEventsPage() {
                   </div>
                   <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-500 mt-1">
                     <span className="flex items-center gap-1">
-                      <Calendar size={14} /> {event.date}
+                      <Calendar size={14} /> {event.dates?.join(", ") || "No date"}
                     </span>
                     {event.location && (
                       <span className="flex items-center gap-1">

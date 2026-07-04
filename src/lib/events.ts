@@ -49,8 +49,10 @@ export async function getAllEvents(fields: string[] = []) {
 
   // Latest first; undated ("Coming soon") events float to the top.
   const sortedEvents = [...allEvents].sort((event1, event2) => {
-    const t1 = eventTime(event1.date);
-    const t2 = eventTime(event2.date);
+    const d1 = event1.dates && event1.dates.length > 0 ? event1.dates[0] : "";
+    const d2 = event2.dates && event2.dates.length > 0 ? event2.dates[0] : "";
+    const t1 = eventTime(d1);
+    const t2 = eventTime(d2);
     if (t1 === t2) return 0;
     return t1 > t2 ? -1 : 1;
   });

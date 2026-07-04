@@ -32,7 +32,7 @@ function normalizeDate(rawDate: string): string | null {
 type ParsedEvent = {
   title: string;
   slug: string;
-  date: string;
+  dates: string[];
   category: string;
   location: string | null;
   description: string | null;
@@ -49,7 +49,7 @@ type ParseResult =
 function parseEventForm(formData: FormData): ParseResult {
   const title = (formData.get("title") as string)?.trim();
   const rawSlug = (formData.get("slug") as string)?.trim();
-  const rawDate = (formData.get("date") as string)?.trim();
+  const rawDates = formData.getAll("dates") as string[];
   const category = (formData.get("category") as string)?.trim();
   const location = (formData.get("location") as string)?.trim() || null;
   const description = (formData.get("description") as string)?.trim() || null;
@@ -60,14 +60,21 @@ function parseEventForm(formData: FormData): ParseResult {
   const isUpcoming = formData.get("isUpcoming") === "on";
 
   if (!title) return { ok: false, error: "Title is required." };
-  if (!rawDate) return { ok: false, error: "Date is required." };
+  
+  const filteredDates = rawDates.map(d => d.trim()).filter(Boolean);
+  if (filteredDates.length === 0) return { ok: false, error: "At least one date is required." };
+
   if (!category || !CATEGORIES.includes(category)) {
     return { ok: false, error: "A valid category is required." };
   }
   if (!content.trim()) return { ok: false, error: "Content is required." };
 
-  const date = normalizeDate(rawDate);
-  if (!date) return { ok: false, error: "Date is invalid." };
+  const dates: string[] = [];
+  for (const rd of filteredDates) {
+    const d = normalizeDate(rd);
+    if (!d) return { ok: false, error: `Date '${rd}' is invalid.` };
+    dates.push(d);
+  }
 
   const slug = rawSlug ? slugify(rawSlug) : slugify(title);
   if (!slug) return { ok: false, error: "Could not derive a valid slug." };
@@ -77,7 +84,7 @@ function parseEventForm(formData: FormData): ParseResult {
     values: {
       title,
       slug,
-      date,
+      dates,
       category,
       location,
       description,
