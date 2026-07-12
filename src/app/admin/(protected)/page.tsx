@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { CleanupButton } from "@/components/admin/CleanupButton";
 import {
   Calendar,
   ClipboardList,
@@ -84,6 +85,7 @@ export default function AdminHomePage() {
             </span>
           </Link>
         ))}
+        <CleanupButton />
       </div>
     </div>
   );

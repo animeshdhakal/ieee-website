@@ -351,7 +351,7 @@ function FieldEditor({
   onRemove,
   onMove,
 }: FieldEditorProps) {
-  const supportsPlaceholder = !["select", "checkbox", "file"].includes(
+  const supportsPlaceholder = !["select", "checkbox", "file", "section"].includes(
     field.type
   );
   const controller = field.condition
@@ -407,13 +407,37 @@ function FieldEditor({
             </div>
           )}
 
+          <div className="md:col-span-2">
+            <label className={labelClass}>Subtext</label>
+            <input
+              type="text"
+              value={field.subtext ?? ""}
+              onChange={(e) => onChange({ subtext: e.target.value })}
+              className={inputClass}
+              placeholder="Optional description shown below the label"
+            />
+          </div>
+
           {field.type === "select" && (
-            <div className="md:col-span-2">
-              <label className={labelClass}>Options (one per line)</label>
-              <OptionsTextarea
-                value={field.options ?? []}
-                onChange={(options) => onChange({ options })}
-              />
+            <div className="md:col-span-2 space-y-4">
+              <div>
+                <label className={labelClass}>Options (one per line)</label>
+                <OptionsTextarea
+                  value={field.options ?? []}
+                  onChange={(options) => onChange({ options })}
+                />
+              </div>
+              <label className="flex items-center gap-2 cursor-pointer w-fit">
+                <input
+                  type="checkbox"
+                  checked={field.allowOther ?? false}
+                  onChange={(e) => onChange({ allowOther: e.target.checked })}
+                  className="w-4 h-4 rounded border-gray-300 text-ieee-blue focus:ring-ieee-blue"
+                />
+                <span className="text-sm font-medium text-gray-700">
+                  Allow &quot;Other&quot; option
+                </span>
+              </label>
             </div>
           )}
 
@@ -429,15 +453,17 @@ function FieldEditor({
             </p>
           </div>
 
-          <label className="flex items-center gap-2 cursor-pointer w-fit">
-            <input
-              type="checkbox"
-              checked={field.required}
-              onChange={(e) => onChange({ required: e.target.checked })}
-              className="w-4 h-4 rounded border-gray-300 text-ieee-blue focus:ring-ieee-blue"
-            />
-            <span className="text-sm font-medium text-gray-700">Required</span>
-          </label>
+          {field.type !== "section" && (
+            <label className="flex items-center gap-2 cursor-pointer w-fit">
+              <input
+                type="checkbox"
+                checked={field.required}
+                onChange={(e) => onChange({ required: e.target.checked })}
+                className="w-4 h-4 rounded border-gray-300 text-ieee-blue focus:ring-ieee-blue"
+              />
+              <span className="text-sm font-medium text-gray-700">Required</span>
+            </label>
+          )}
 
           {/* Conditional visibility */}
           <div className="md:col-span-2 border-t border-gray-100 pt-4">
@@ -445,12 +471,12 @@ function FieldEditor({
               <input
                 type="checkbox"
                 checked={!!field.condition}
-                disabled={precedingFields.length === 0}
+                disabled={precedingFields.filter((f) => f.type !== "section").length === 0}
                 onChange={(e) =>
                   onChange({
                     condition: e.target.checked
                       ? {
-                          field: precedingFields[0].id,
+                          field: precedingFields.find((f) => f.type !== "section")?.id || "",
                           operator: "equals",
                           value: "",
                         }
@@ -464,9 +490,9 @@ function FieldEditor({
               </span>
             </label>
 
-            {precedingFields.length === 0 && (
+            {precedingFields.filter((f) => f.type !== "section").length === 0 && (
               <p className="text-xs text-gray-400 mt-1">
-                Add a field above this one to use as the condition.
+                Add a non-section field above this one to use as the condition.
               </p>
             )}
 
@@ -486,11 +512,13 @@ function FieldEditor({
                   }
                   className="px-3 py-1.5 border border-gray-200 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-ieee-blue/30"
                 >
-                  {precedingFields.map((f) => (
-                    <option key={f.id} value={f.id}>
-                      {f.label || "(untitled field)"}
-                    </option>
-                  ))}
+                  {precedingFields
+                    .filter((f) => f.type !== "section")
+                    .map((f) => (
+                      <option key={f.id} value={f.id}>
+                        {f.label || "(untitled field)"}
+                      </option>
+                    ))}
                 </select>
                 <select
                   value={field.condition.operator}

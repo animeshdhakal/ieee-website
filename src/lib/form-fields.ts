@@ -12,6 +12,7 @@ export const FIELD_TYPES = [
   "select",
   "checkbox",
   "file",
+  "section",
 ] as const;
 
 export type FieldType = (typeof FIELD_TYPES)[number];
@@ -44,6 +45,10 @@ export interface FormField {
   options?: string[];
   /** Optional image shown beneath the label (e.g. a payment QR code). */
   image?: string;
+  /** Optional subtext/description to show under the field label. */
+  subtext?: string;
+  /** Allow users to select "Other" and input custom text (for select fields). */
+  allowOther?: boolean;
   /** When set, the field is only shown/collected if the condition is met. */
   condition?: FieldCondition;
 }
@@ -79,6 +84,7 @@ export const FIELD_TYPE_LABELS: Record<FieldType, string> = {
   select: "Dropdown",
   checkbox: "Checkbox",
   file: "File upload",
+  section: "Section Header",
 };
 
 export function slugify(value: string): string {

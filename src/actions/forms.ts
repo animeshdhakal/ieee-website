@@ -72,6 +72,7 @@ export async function submitDynamicForm(
     // Read every raw value first so field conditions can be evaluated.
     const raw: Record<string, string | boolean | File> = {};
     for (const field of fields) {
+      if (field.type === "section") continue;
       if (field.type === "checkbox") {
         raw[field.name] = formData.get(field.name) === "on";
       } else if (field.type === "file") {
@@ -86,14 +87,20 @@ export async function submitDynamicForm(
     // dependents — mirrors the client so hidden required fields don't block.
     const effective: Record<string, unknown> = { ...raw };
     const isVisible = new Map<string, boolean>();
+    let currentSectionVisible = true;
     for (const field of fields) {
-      const visible = isFieldVisible(field, effective);
+      const selfVisible = isFieldVisible(field, effective);
+      if (field.type === "section") {
+        currentSectionVisible = selfVisible;
+      }
+      const visible = selfVisible && currentSectionVisible;
       isVisible.set(field.name, visible);
-      if (!visible) delete effective[field.name];
+      if (!visible && field.type !== "section") delete effective[field.name];
     }
 
     const collected: Record<string, unknown> = {};
     for (const field of fields) {
+      if (field.type === "section") continue;
       if (!isVisible.get(field.name)) continue;
       const value = raw[field.name];
 
@@ -121,10 +128,21 @@ export async function submitDynamicForm(
       if (field.required && !str) {
         return { error: `"${field.label}" is required.` };
       }
-      if (field.type === "select" && str && !field.options?.includes(str)) {
-        return { error: `"${str}" is not a valid option for "${field.label}".` };
+      if (field.type === "select" && str) {
+        if (field.allowOther && str === "__other__") {
+          const otherValue = (formData.get(`${field.name}_other`) as string)?.trim();
+          if (field.required && !otherValue) {
+            return { error: `Please specify a value for "${field.label}".` };
+          }
+          collected[field.name] = otherValue;
+        } else if (!field.options?.includes(str)) {
+          return { error: `"${str}" is not a valid option for "${field.label}".` };
+        } else {
+          collected[field.name] = str;
+        }
+      } else {
+        collected[field.name] = str;
       }
-      collected[field.name] = str;
     }
 
     await db.insert(formSubmissions).values({
