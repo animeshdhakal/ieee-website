@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "5mb",
+    },
+  },
   images: {
     // Serve modern formats and cache optimized variants for 30 days.
     formats: ["image/avif", "image/webp"],
