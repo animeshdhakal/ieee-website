@@ -76,6 +76,17 @@ function buildSchema(fields: FormField[]) {
           message: "Enter a valid email address.",
         });
       }
+
+      if (filled && field.type === "file") {
+        const fileList = value as FileList;
+        if (fileList.length > 0 && fileList[0].size > 10 * 1024 * 1024) {
+          ctx.addIssue({
+            code: "custom",
+            path: [field.name],
+            message: "File must be less than 10MB.",
+          });
+        }
+      }
       if (filled && field.type === "number" && typeof value === "string" && Number.isNaN(Number(value))) {
         ctx.addIssue({
           code: "custom",
@@ -482,12 +493,15 @@ function FieldInput({
           )}
         </div>
       ) : field.type === "file" ? (
-        <input
-          type="file"
-          id={field.name}
-          {...reg}
-          className="block w-full text-sm text-gray-500 cursor-pointer file:mr-4 file:cursor-pointer file:rounded-lg file:border file:border-gray-200 file:bg-white file:px-5 file:py-2.5 file:text-sm file:font-bold file:text-ieee-blue hover:file:bg-gray-50 file:transition-colors"
-        />
+        <div className="space-y-2">
+          <input
+            type="file"
+            id={field.name}
+            {...reg}
+            className="block w-full text-sm text-gray-500 cursor-pointer file:mr-4 file:cursor-pointer file:rounded-lg file:border file:border-gray-200 file:bg-white file:px-5 file:py-2.5 file:text-sm file:font-bold file:text-ieee-blue hover:file:bg-gray-50 file:transition-colors"
+          />
+          <p className="text-xs text-gray-400">Max file size: 10MB</p>
+        </div>
       ) : (
         <input
           type={field.type}
