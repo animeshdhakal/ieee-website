@@ -295,18 +295,20 @@ export function DynamicForm({ slug, fields }: Props) {
           </div>
           </div>
 
-          <div className="space-y-8">
-            {pages[currentPage]?.map((field) => (
-              <FieldInput
-                key={field.id}
-                field={field}
-                register={register}
-                error={errors[field.name]?.message as string | undefined}
-                otherError={errors[`${field.name}_other`]?.message as string | undefined}
-                currentValue={values[field.name]}
-              />
-            ))}
-          </div>
+          {pages.map((pageFields, pageIndex) => (
+            <div key={pageIndex} className={pageIndex !== currentPage ? "hidden" : "space-y-8"}>
+              {pageFields.map((field) => (
+                <FieldInput
+                  key={field.id}
+                  field={field}
+                  register={register}
+                  error={errors[field.name]?.message as string | undefined}
+                  otherError={errors[`${field.name}_other`]?.message as string | undefined}
+                  currentValue={values[field.name]}
+                />
+              ))}
+            </div>
+          ))}
 
           <div className="pt-4 flex gap-4">
             {currentPage > 0 && (
