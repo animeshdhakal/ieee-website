@@ -1,55 +1,61 @@
-import { db } from "@/db";
-import { blogs } from "@/db/schema";
-import { eq, desc } from "drizzle-orm";
+import fs from "fs";
+import path from "path";
+import { parseMarkdownFile } from "./markdown";
 
-export async function getPostSlugs() {
-  const result = await db.select({ slug: blogs.slug }).from(blogs);
-  return result.map(row => row.slug);
+const postsDirectory = path.join(process.cwd(), "src/content/blogs");
+
+export interface BlogPost {
+  slug: string;
+  title: string;
+  excerpt: string;
+  date: string;
+  author: string;
+  authorRole: string;
+  category: string;
+  readTime: string;
+  thumbnail: string;
+  content: string;
 }
 
-export async function getPostBySlug(slug: string, fields: string[] = []) {
-  const [post] = await db.select().from(blogs).where(eq(blogs.slug, slug));
-  
-  if (!post) return null;
-
-  type Items = Record<string, any>;
-  const items: Items = {};
-
-  if (fields.length === 0) {
-    return post;
-  }
-
-  items["slug"] = post.slug;
-  items["content"] = post.content;
-
-  fields.forEach((field) => {
-    if (field in post) {
-      items[field] = post[field as keyof typeof post];
-    }
-  });
-
-  return items;
+export function getPostSlugs(): string[] {
+  if (!fs.existsSync(postsDirectory)) return [];
+  return fs
+    .readdirSync(postsDirectory)
+    .filter((file: string) => file.endsWith(".md"))
+    .map((file: string) => file.replace(/\.md$/, ""));
 }
 
-export async function getAllPosts(fields: string[] = []) {
-  const allPosts = await db.select().from(blogs);
-  
-  const sortedPosts = allPosts.sort((post1, post2) => {
+export function getPostBySlug(slug: string): BlogPost | null {
+  const realSlug = slug.replace(/\.md$/, "");
+  const fullPath = path.join(postsDirectory, `${realSlug}.md`);
+
+  if (!fs.existsSync(fullPath)) return null;
+
+  const { data, content } = parseMarkdownFile(fullPath);
+
+  return {
+    slug: realSlug,
+    title: typeof data.title === "string" ? data.title : realSlug,
+    excerpt: typeof data.excerpt === "string" ? data.excerpt : "",
+    date: typeof data.date === "string" ? data.date : "",
+    author: typeof data.author === "string" ? data.author : "IEEE Pulchowk",
+    authorRole: typeof data.authorRole === "string" ? data.authorRole : "",
+    category: typeof data.category === "string" ? data.category : "General",
+    readTime: typeof data.readTime === "string" ? data.readTime : "3 min read",
+    thumbnail: typeof data.thumbnail === "string" ? data.thumbnail : "",
+    content,
+  };
+}
+
+export function getAllPosts(): BlogPost[] {
+  const slugs = getPostSlugs();
+  const posts = slugs
+    .map((slug) => getPostBySlug(slug))
+    .filter((p): p is BlogPost => p !== null);
+
+  return posts.sort((post1, post2) => {
     const date1 = new Date(post1.date).getTime();
     const date2 = new Date(post2.date).getTime();
     return date1 > date2 ? -1 : 1;
-  });
-
-  return sortedPosts.map(post => {
-    const items: Record<string, any> = {};
-    if (fields.length === 0) return post;
-    
-    fields.forEach((field) => {
-      if (field in post) {
-        items[field] = post[field as keyof typeof post];
-      }
-    });
-    items["slug"] = post.slug;
-    return items;
   });
 }

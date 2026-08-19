@@ -18,17 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogsPage() {
-    const posts = await getAllPosts([
-        "slug",
-        "title",
-        "excerpt",
-        "date",
-        "category",
-        "thumbnail",
-        "readTime",
-        "author",
-        "authorRole",
-    ]);
+    const posts = await getAllPosts();
 
     const formattedPosts: BlogPost[] = posts.map((post) => ({
         id: post.slug,

@@ -73,7 +73,7 @@ const EventList: React.FC<EventListProps> = ({ events }) => {
                         {categories.map((cat) => (
                             <button
                                 key={cat}
-                                onClick={() => setFilter(cat as any)}
+                                onClick={() => setFilter(cat as EventCategory | "All")}
                                 className={`px-4 py-1.5 rounded-full text-xs font-medium border transition-all whitespace-nowrap ${
                                     filter === cat
                                         ? "bg-ieee-dark text-white border-ieee-dark"

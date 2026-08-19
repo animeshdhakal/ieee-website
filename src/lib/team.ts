@@ -1,137 +1,160 @@
-import { db } from "@/db";
-import { teamMembers } from "@/db/schema";
-import { asc, desc, eq } from "drizzle-orm";
-import { slugify } from "./form-fields";
-import type { TeamMember, Committee } from "@/types";
+import { TEAM_DATA, TeamData } from "@/constants";
 
-/** URL slug for a member, derived from their name (e.g. "animesh-dhakal"). */
-export function teamMemberSlug(name: string): string {
-  return slugify(name);
+export type { TeamData };
+
+export interface TeamMemberRecord {
+  id: string;
+  year: string;
+  section: "officers" | "seniorExecs" | "committee";
+  committeeTitle?: string;
+  name: string;
+  role: string;
+  imageUrl?: string;
+  linkedin?: string;
+  github?: string;
+  instagram?: string;
+  imagePosition?: string;
+  imageScale?: number;
+  imageOffset?: number;
 }
 
-export type TeamData = {
-  officers: TeamMember[];
-  seniorExecs: TeamMember[];
-  committees: Committee[];
-};
-
-export type TeamMemberRecord = typeof teamMembers.$inferSelect;
-
-export const TEAM_SECTIONS = ["officers", "seniorExecs", "committee"] as const;
-export type TeamSection = (typeof TEAM_SECTIONS)[number];
-
-function toMember(row: TeamMemberRecord): TeamMember {
-  return {
-    id: String(row.id),
-    name: row.name,
-    role: row.role,
-    imageUrl: row.imageUrl ?? undefined,
-    linkedin: row.linkedin ?? undefined,
-    github: row.github ?? undefined,
-    instagram: row.instagram ?? undefined,
-    imagePosition: row.imagePosition ?? undefined,
-    imageScale: row.imageScale ?? undefined,
-    imageOffset: row.imageOffset ?? undefined,
-  };
-}
-
-/** Reconstructs the year → { officers, seniorExecs, committees } structure. */
 export async function getTeamData(): Promise<Record<string, TeamData>> {
-  const rows = await db
-    .select()
-    .from(teamMembers)
-    .orderBy(asc(teamMembers.year), asc(teamMembers.sortOrder));
-
-  // A person may have a photo on one year's record but not another. Build a
-  // per-person fallback (by name slug) so their picture shows in every year.
-  const photoBySlug = new Map<
-    string,
-    Pick<TeamMemberRecord, "imageUrl" | "imageScale" | "imageOffset" | "imagePosition">
-  >();
-  for (const row of rows) {
-    if (row.imageUrl) photoBySlug.set(slugify(row.name), row);
-  }
-
-  const byYear: Record<string, TeamData> = {};
-
-  for (const row of rows) {
-    const year = (byYear[row.year] ??= {
-      officers: [],
-      seniorExecs: [],
-      committees: [],
-    });
-    const member = toMember(row);
-
-    if (!member.imageUrl) {
-      const fallback = photoBySlug.get(slugify(row.name));
-      if (fallback) {
-        member.imageUrl = fallback.imageUrl ?? undefined;
-        member.imageScale = fallback.imageScale ?? undefined;
-        member.imageOffset = fallback.imageOffset ?? undefined;
-        member.imagePosition = fallback.imagePosition ?? undefined;
-      }
-    }
-
-    if (row.section === "officers") {
-      year.officers.push(member);
-    } else if (row.section === "seniorExecs") {
-      year.seniorExecs.push(member);
-    } else {
-      const title = row.committeeTitle?.trim() || "Committee";
-      let committee = year.committees.find((c) => c.title === title);
-      if (!committee) {
-        committee = { title, members: [] };
-        year.committees.push(committee);
-      }
-      committee.members.push(member);
-    }
-  }
-
-  return byYear;
+  return TEAM_DATA;
 }
 
-/** Flat list for the admin table, ordered for display. */
+export function teamMemberSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 export async function getAllTeamMembers(): Promise<TeamMemberRecord[]> {
-  return db
-    .select()
-    .from(teamMembers)
-    .orderBy(asc(teamMembers.year), asc(teamMembers.sortOrder));
+  const members: TeamMemberRecord[] = [];
+  for (const [year, data] of Object.entries(TEAM_DATA)) {
+    for (const m of data.officers) {
+      members.push({
+        id: m.id,
+        year,
+        section: "officers",
+        name: m.name,
+        role: m.role,
+        imageUrl: m.imageUrl,
+        linkedin: m.linkedin,
+        github: m.github,
+        instagram: m.instagram,
+        imagePosition: m.imagePosition,
+        imageScale: m.imageScale,
+        imageOffset: m.imageOffset,
+      });
+    }
+    for (const m of data.seniorExecs) {
+      members.push({
+        id: m.id,
+        year,
+        section: "seniorExecs",
+        name: m.name,
+        role: m.role,
+        imageUrl: m.imageUrl,
+        linkedin: m.linkedin,
+        github: m.github,
+        instagram: m.instagram,
+        imagePosition: m.imagePosition,
+        imageScale: m.imageScale,
+        imageOffset: m.imageOffset,
+      });
+    }
+    for (const c of data.committees) {
+      for (const m of c.members) {
+        members.push({
+          id: m.id,
+          year,
+          section: "committee",
+          committeeTitle: c.title,
+          name: m.name,
+          role: m.role,
+          imageUrl: m.imageUrl,
+          linkedin: m.linkedin,
+          github: m.github,
+          instagram: m.instagram,
+          imagePosition: m.imagePosition,
+          imageScale: m.imageScale,
+          imageOffset: m.imageOffset,
+        });
+      }
+    }
+  }
+  return members;
 }
 
-export async function getTeamMemberById(
-  id: number
-): Promise<TeamMemberRecord | null> {
-  const [member] = await db
-    .select()
-    .from(teamMembers)
-    .where(eq(teamMembers.id, id));
-  return member ?? null;
+export async function getTeamMemberById(id: number | string): Promise<TeamMemberRecord | null> {
+  const members = await getAllTeamMembers();
+  return members.find((m) => String(m.id) === String(id)) ?? null;
 }
 
-/**
- * Looks up a member by name-derived slug. If a name repeats across committee
- * years, the most recent year's record wins.
- */
-export async function getTeamMemberBySlug(
-  slug: string
-): Promise<TeamMemberRecord | null> {
-  const rows = await db
-    .select()
-    .from(teamMembers)
-    .orderBy(desc(teamMembers.year));
-  return rows.find((member) => slugify(member.name) === slug) ?? null;
-}
+export async function getTeamMemberHistory(slug: string): Promise<TeamMemberRecord[]> {
+  const history: TeamMemberRecord[] = [];
 
-/**
- * All records for a person (matched by name slug), newest year first. A person
- * who served on several committees/years has one entry per position.
- */
-export async function getTeamMemberHistory(
-  slug: string
-): Promise<TeamMemberRecord[]> {
-  const rows = await db
-    .select()
-    .from(teamMembers)
-    .orderBy(desc(teamMembers.year), asc(teamMembers.sortOrder));
-  return rows.filter((member) => slugify(member.name) === slug);
+  for (const [year, data] of Object.entries(TEAM_DATA)) {
+    for (const m of data.officers) {
+      if (teamMemberSlug(m.name) === slug) {
+        history.push({
+          id: m.id,
+          year,
+          section: "officers",
+          name: m.name,
+          role: m.role,
+          imageUrl: m.imageUrl,
+          linkedin: m.linkedin,
+          github: m.github,
+          instagram: m.instagram,
+          imagePosition: m.imagePosition,
+          imageScale: m.imageScale,
+          imageOffset: m.imageOffset,
+        });
+      }
+    }
+    for (const m of data.seniorExecs) {
+      if (teamMemberSlug(m.name) === slug) {
+        history.push({
+          id: m.id,
+          year,
+          section: "seniorExecs",
+          name: m.name,
+          role: m.role,
+          imageUrl: m.imageUrl,
+          linkedin: m.linkedin,
+          github: m.github,
+          instagram: m.instagram,
+          imagePosition: m.imagePosition,
+          imageScale: m.imageScale,
+          imageOffset: m.imageOffset,
+        });
+      }
+    }
+    for (const c of data.committees) {
+      for (const m of c.members) {
+        if (teamMemberSlug(m.name) === slug) {
+          history.push({
+            id: m.id,
+            year,
+            section: "committee",
+            committeeTitle: c.title,
+            name: m.name,
+            role: m.role,
+            imageUrl: m.imageUrl,
+            linkedin: m.linkedin,
+            github: m.github,
+            instagram: m.instagram,
+            imagePosition: m.imagePosition,
+            imageScale: m.imageScale,
+            imageOffset: m.imageOffset,
+          });
+        }
+      }
+    }
+  }
+
+  return history;
 }

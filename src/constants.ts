@@ -497,6 +497,34 @@ export const TEAM_DATA: Record<string, TeamData> = {
 
 export const GALLERY_ITEMS: GalleryItem[] = [
   {
+    id: "g-latex-2026-1",
+    title: "LaTeX Workshop 2026 - Group Photo",
+    date: "August 14, 2026",
+    category: "Workshop",
+    imageUrl: "/gallery/latex-workshop-2026-group.png",
+  },
+  {
+    id: "g-latex-2026-2",
+    title: "LaTeX Workshop 2026 - Hands-on Session",
+    date: "August 13, 2026",
+    category: "Workshop",
+    imageUrl: "/gallery/latex-workshop-2026-session.png",
+  },
+  {
+    id: "g-latex-2026-3",
+    title: "LaTeX Workshop 2026 - Presentation & Demo",
+    date: "August 12, 2026",
+    category: "Workshop",
+    imageUrl: "/gallery/latex-workshop-2026-presentation.png",
+  },
+  {
+    id: "g-latex-2026-4",
+    title: "LaTeX Workshop 2026 - Token of Appreciation",
+    date: "August 14, 2026",
+    category: "Workshop",
+    imageUrl: "/gallery/latex-workshop-2026-token.png",
+  },
+  {
     id: "g1",
     title: "IEEE 2026 First Meetup",
     date: "2026",

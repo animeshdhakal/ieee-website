@@ -18,28 +18,18 @@ export const metadata: Metadata = {
 };
 
 export default async function EventsPage() {
-    const events = await getAllEvents([
-        "slug",
-        "title",
-        "dates",
-        "location",
-        "description",
-        "category",
-        "isUpcoming",
-        "thumbnail",
-        "registrationUrl",
-    ]);
+    const events = await getAllEvents();
 
     const formattedEvents: IeeeEvent[] = events.map((event) => ({
-        id: event.slug as string,
-        title: event.title as string,
-        dates: event.dates as string[],
-        location: event.location as string,
-        description: event.description as string,
-        category: event.category as EventCategory,
-        isUpcoming: event.isUpcoming as unknown as boolean, // gray-matter returns boolean
-        imageUrl: event.thumbnail as string,
-        registrationUrl: event.registrationUrl as string | undefined,
+        id: event.slug,
+        title: event.title,
+        dates: event.dates,
+        location: event.location,
+        description: event.description,
+        category: (event.category as EventCategory) || EventCategory.WORKSHOP,
+        isUpcoming: event.isUpcoming,
+        imageUrl: event.thumbnail,
+        registrationUrl: event.registrationUrl || undefined,
     }));
 
     return <EventList events={formattedEvents} />;

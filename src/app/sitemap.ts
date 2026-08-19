@@ -7,8 +7,8 @@ import { getAllEvents } from "@/lib/events";
 const SITE_URL = "https://ieeepsb.org";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const posts = await getAllPosts(["slug"]);
-    const events = await getAllEvents(["slug"]);
+    const posts = await getAllPosts();
+    const events = await getAllEvents();
 
     const blogUrls: MetadataRoute.Sitemap = posts.map((post) => ({
         url: `${SITE_URL}/blogs/${post.slug}`,

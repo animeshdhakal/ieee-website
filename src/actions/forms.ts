@@ -4,12 +4,10 @@ import { db } from "@/db";
 import { formSubmissions } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/utils/supabase/server";
 import { getFormBySlug } from "@/lib/forms";
 import { type FormField, isFieldVisible } from "@/lib/form-fields";
-
-/** Public bucket that dynamic-form file uploads are stored in. */
-const FORM_UPLOAD_BUCKET = "form-uploads";
+import fs from "fs/promises";
+import path from "path";
 
 export type DynamicFormState =
   | { error: string }
@@ -17,29 +15,24 @@ export type DynamicFormState =
   | null;
 
 async function uploadFile(field: FormField, file: File): Promise<string> {
-  const supabase = await createClient();
-  const fileExt = file.name.split(".").pop();
+  const bytes = await file.arrayBuffer();
+  const buffer = Buffer.from(bytes);
+  const uploadsDir = path.join(process.cwd(), "public", "uploads");
+  await fs.mkdir(uploadsDir, { recursive: true });
+
+  const fileExt = file.name.split(".").pop() || "bin";
   const fileName = `${field.name}-${Date.now()}-${Math.random()
     .toString(36)
     .substring(7)}.${fileExt}`;
 
-  const { error } = await supabase.storage
-    .from(FORM_UPLOAD_BUCKET)
-    .upload(fileName, file);
+  const filePath = path.join(uploadsDir, fileName);
+  await fs.writeFile(filePath, buffer);
 
-  if (error) {
-    console.error("Storage error:", error);
-    throw new Error(
-      `Failed to upload "${field.label}". Ensure the "${FORM_UPLOAD_BUCKET}" storage bucket exists and is public.`
-    );
-  }
-
-  return fileName;
+  return `/uploads/${fileName}`;
 }
 
 /**
- * Handles submissions for any admin-built form. Validates the payload against
- * the stored field schema so a tampered client can't bypass required fields.
+ * Handles submissions for any dynamic form and stores response in PostgreSQL DB.
  */
 export async function submitDynamicForm(
   _prevState: DynamicFormState,
@@ -69,7 +62,7 @@ export async function submitDynamicForm(
 
     const fields = (form.fields ?? []) as FormField[];
 
-    // Read every raw value first so field conditions can be evaluated.
+    // Read raw values first
     const raw: Record<string, string | boolean | File> = {};
     for (const field of fields) {
       if (field.type === "section") continue;
@@ -83,8 +76,7 @@ export async function submitDynamicForm(
       }
     }
 
-    // Resolve visibility in order so a hidden controller cascades to its
-    // dependents — mirrors the client so hidden required fields don't block.
+    // Resolve visibility
     const effective: Record<string, unknown> = { ...raw };
     const isVisible = new Map<string, boolean>();
     let currentSectionVisible = true;

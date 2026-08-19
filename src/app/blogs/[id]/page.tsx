@@ -11,21 +11,21 @@ export async function generateMetadata({
     params: Promise<{ id: string }>;
 }): Promise<Metadata> {
     const { id } = await params;
-    const post = await getPostBySlug(id, ["title", "excerpt", "thumbnail"]);
+    const post = getPostBySlug(id);
 
     if (!post) {
         return { title: "Blog Not Found" };
     }
 
     return {
-        title: post.title as string,
-        description: post.excerpt as string,
+        title: post.title,
+        description: post.excerpt,
         openGraph: {
-            title: post.title as string,
-            description: post.excerpt as string,
+            title: post.title,
+            description: post.excerpt,
             type: "article",
             ...(post.thumbnail && {
-                images: [{ url: post.thumbnail as string }],
+                images: [{ url: post.thumbnail }],
             }),
         },
     };
@@ -39,17 +39,7 @@ export default async function BlogPostPage({
     params: Promise<{ id: string }>;
 }) {
     const { id } = await params;
-    const postData = await getPostBySlug(id, [
-        "title",
-        "date",
-        "slug",
-        "author",
-        "authorRole",
-        "content",
-        "thumbnail",
-        "category",
-        "readTime",
-    ]);
+    const postData = getPostBySlug(id);
 
     if (!postData) {
         return (
@@ -70,7 +60,7 @@ export default async function BlogPostPage({
     }
 
     // Fetch related posts for sidebar/bottom
-    const allPosts = await getAllPosts(["slug", "title", "category", "excerpt"]);
+    const allPosts = getAllPosts();
     const relatedPosts = allPosts.filter((p) => p.slug !== id).slice(0, 2);
 
     return (

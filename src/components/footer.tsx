@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { Mail, MapPin, Facebook, Linkedin, Instagram } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
+import { Facebook, Linkedin, Instagram } from "@/components/icons";
 
 const Footer: React.FC = () => {
     return (

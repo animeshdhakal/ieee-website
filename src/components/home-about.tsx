@@ -26,7 +26,7 @@ const HomeAbout: React.FC = () => {
               seminars, and projects.
             </p>
             <p className="text-gray-600 leading-relaxed mb-8">
-              As part of the world's largest technical professional
+              As part of the world&apos;s largest technical professional
               organization, we provide our members access to cutting-edge
               information, networking opportunities, and career development
               resources.

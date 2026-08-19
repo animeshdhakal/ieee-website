@@ -1,0 +1,5 @@
+allowBuilds:
+  esbuild: true
+  unrs-resolver: false
+minimumReleaseAgeExclude:
+  - lucide-react@1.32.0

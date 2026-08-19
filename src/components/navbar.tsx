@@ -10,11 +10,13 @@ const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const [prevPath, setPrevPath] = useState(pathname);
 
   // Close mobile menu on route change
-  useEffect(() => {
+  if (prevPath !== pathname) {
+    setPrevPath(pathname);
     setIsOpen(false);
-  }, [pathname]);
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,12 +33,10 @@ const Navbar: React.FC = () => {
   }`;
 
   const textClass = scrolled || isOpen ? "text-gray-800" : "text-white";
-  const logoClass = scrolled || isOpen ? "text-ieee-blue" : "text-white";
 
   // Force dark text on non-home pages if not scrolled, as they might have light backgrounds
   const isHome = pathname === "/";
   const finalTextClass = !isHome && !scrolled ? "text-gray-800" : textClass;
-  const finalLogoClass = !isHome && !scrolled ? "text-ieee-blue" : logoClass;
   const finalNavClass =
     !isHome && !scrolled
       ? "fixed w-full z-50 bg-white border-b border-gray-100 py-4 transition-all duration-300"
@@ -59,18 +59,6 @@ const Navbar: React.FC = () => {
                 className="h-10 w-auto object-contain transition-opacity duration-300"
               />
             </div>
-            {/* <div className="flex flex-col">
-              <span
-                className={`font-bold text-lg leading-tight tracking-tight ${finalLogoClass}`}
-              >
-                IEEE PSB
-              </span>
-              <span
-                className={`text-[10px] uppercase tracking-wider opacity-80 ${finalTextClass}`}
-              >
-                Pulchowk Campus
-              </span>
-            </div> */}
           </Link>
 
           {/* Desktop Menu */}

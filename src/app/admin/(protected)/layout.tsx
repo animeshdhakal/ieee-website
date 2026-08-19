@@ -25,34 +25,10 @@ export default function AdminLayout({
               </div>
               <nav className="hidden sm:flex items-center gap-1 ml-8">
                 <Link
-                  href="/admin/events"
-                  className="px-3 py-2 text-sm font-medium text-gray-600 hover:text-ieee-blue hover:bg-blue-50 rounded-lg transition-colors"
-                >
-                  Events
-                </Link>
-                <Link
                   href="/admin/forms"
                   className="px-3 py-2 text-sm font-medium text-gray-600 hover:text-ieee-blue hover:bg-blue-50 rounded-lg transition-colors"
                 >
                   Forms
-                </Link>
-                <Link
-                  href="/admin/blogs"
-                  className="px-3 py-2 text-sm font-medium text-gray-600 hover:text-ieee-blue hover:bg-blue-50 rounded-lg transition-colors"
-                >
-                  Blogs
-                </Link>
-                <Link
-                  href="/admin/gallery"
-                  className="px-3 py-2 text-sm font-medium text-gray-600 hover:text-ieee-blue hover:bg-blue-50 rounded-lg transition-colors"
-                >
-                  Gallery
-                </Link>
-                <Link
-                  href="/admin/team"
-                  className="px-3 py-2 text-sm font-medium text-gray-600 hover:text-ieee-blue hover:bg-blue-50 rounded-lg transition-colors"
-                >
-                  Team
                 </Link>
               </nav>
             </div>

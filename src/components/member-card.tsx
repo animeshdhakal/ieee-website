@@ -1,5 +1,6 @@
 import React from "react";
-import { Linkedin, Github, Instagram, User } from "lucide-react";
+import { User } from "lucide-react";
+import { Linkedin, Github, Instagram } from "@/components/icons";
 import Link from "next/link";
 import { TeamMember } from "../types";
 import Image from "next/image";
@@ -7,10 +8,9 @@ import { slugify } from "@/lib/form-fields";
 
 interface MemberCardProps {
   member: TeamMember;
-  compact?: boolean; // For executive members list if needed to be smaller
 }
 
-const MemberCard: React.FC<MemberCardProps> = ({ member, compact = false }) => {
+const MemberCard: React.FC<MemberCardProps> = ({ member }) => {
   const href = `/team/${slugify(member.name)}`;
   return (
     <div className="group relative bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-ieee-blue/30 transition-all duration-300 flex flex-col overflow-hidden h-full">

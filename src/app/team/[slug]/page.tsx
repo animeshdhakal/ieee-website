@@ -4,7 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ArrowLeft, Linkedin, Github, Instagram, Calendar } from "lucide-react";
+import { ArrowLeft, Calendar } from "lucide-react";
+import { Linkedin, Github, Instagram } from "@/components/icons";
 import { getTeamMemberHistory, type TeamMemberRecord } from "@/lib/team";
 
 const SECTION_LABELS: Record<string, string> = {

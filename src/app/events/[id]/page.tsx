@@ -11,7 +11,7 @@ export async function generateMetadata({
     params: Promise<{ id: string }>;
 }): Promise<Metadata> {
     const { id } = await params;
-    const event = await getEventBySlug(id, ["title", "description", "thumbnail"]);
+    const event = getEventBySlug(id);
 
     if (!event) {
         return {
@@ -20,14 +20,14 @@ export async function generateMetadata({
     }
 
     return {
-        title: event.title as string,
-        description: event.description as string,
+        title: event.title,
+        description: event.description,
         openGraph: {
-            title: event.title as string,
-            description: event.description as string,
+            title: event.title,
+            description: event.description,
             type: "article",
             ...(event.thumbnail && {
-                images: [{ url: event.thumbnail as string }],
+                images: [{ url: event.thumbnail }],
             }),
         },
     };
@@ -41,18 +41,7 @@ export default async function EventPage({
     params: Promise<{ id: string }>;
 }) {
     const { id } = await params;
-    const eventData = await getEventBySlug(id, [
-        "title",
-        "dates",
-        "slug",
-        "location",
-        "category",
-        "isUpcoming",
-        "description",
-        "thumbnail",
-        "registrationUrl",
-        "content",
-    ]);
+    const eventData = getEventBySlug(id);
 
     if (!eventData) {
         return (
@@ -72,13 +61,7 @@ export default async function EventPage({
         );
     }
 
-    const allEvents = await getAllEvents([
-        "slug",
-        "title",
-        "category",
-        "dates",
-        "description",
-    ]);
+    const allEvents = getAllEvents();
     const relatedEvents = allEvents.filter((e) => e.slug !== id).slice(0, 2);
 
     return (
@@ -122,7 +105,7 @@ export default async function EventPage({
                                 size={16}
                                 className="mr-2 text-ieee-blue"
                             />
-                            {(eventData.dates as string[])?.join(", ") || "No dates"}
+                            {eventData.dates.join(", ") || "No dates"}
                         </div>
                         <div className="flex items-center">
                             <MapPin size={16} className="mr-2 text-ieee-blue" />
@@ -132,7 +115,7 @@ export default async function EventPage({
 
                     {eventData.isUpcoming && eventData.registrationUrl && (
                         <a
-                            href={eventData.registrationUrl as string}
+                            href={eventData.registrationUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center px-6 py-2.5 bg-ieee-blue text-white rounded-full font-semibold hover:bg-blue-600 transition-all duration-300 shadow-sm hover:shadow-md text-sm"
@@ -149,15 +132,15 @@ export default async function EventPage({
                 {eventData.thumbnail && (
                     <div className="mb-12 rounded-xl overflow-hidden shadow-lg">
                         <img
-                            src={eventData.thumbnail as string}
-                            alt={eventData.title as string}
+                            src={eventData.thumbnail}
+                            alt={eventData.title}
                             className="w-full h-auto"
                         />
                     </div>
                 )}
 
                 <div className="prose prose-lg prose-blue max-w-none text-gray-700 leading-relaxed mb-12">
-                    <ReactMarkdown>{eventData.content as string}</ReactMarkdown>
+                    <ReactMarkdown>{eventData.content}</ReactMarkdown>
                 </div>
             </div>
 
@@ -172,7 +155,7 @@ export default async function EventPage({
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {relatedEvents.map((related) => (
                                 <Link
-                                    key={related.slug as string}
+                                    key={related.slug}
                                     href={`/events/${related.slug}`}
                                     className="group block bg-gray-50 p-6 rounded-xl hover:bg-blue-50 transition-colors"
                                 >
