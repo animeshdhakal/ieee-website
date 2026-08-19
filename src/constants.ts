@@ -497,6 +497,41 @@ export const TEAM_DATA: Record<string, TeamData> = {
 
 export const GALLERY_ITEMS: GalleryItem[] = [
   {
+    id: "g-acei-2026-1",
+    title: "ACEI 2026: The Venture - Final Pitching Day Group",
+    date: "August 2, 2026",
+    category: "Competition",
+    imageUrl: "/gallery/acei-2026-group.png",
+  },
+  {
+    id: "g-acei-2026-2",
+    title: "ACEI 2026: Block-Series Nepal - Certificate Awardees",
+    date: "August 2, 2026",
+    category: "Competition",
+    imageUrl: "/gallery/acei-2026-winners.png",
+  },
+  {
+    id: "g-acei-2026-3",
+    title: "ACEI 2026: The Venture - Live Pitching Session",
+    date: "August 2, 2026",
+    category: "Competition",
+    imageUrl: "/gallery/acei-2026-pitching.png",
+  },
+  {
+    id: "g-acei-2026-4",
+    title: "ACEI 2026 - Keynote & Mentorship Session",
+    date: "August 2, 2026",
+    category: "Competition",
+    imageUrl: "/gallery/acei-2026-audience-1.png",
+  },
+  {
+    id: "g-acei-2026-5",
+    title: "ACEI 2026 - Attendees at Leapfrog Technology",
+    date: "August 2, 2026",
+    category: "Competition",
+    imageUrl: "/gallery/acei-2026-audience-2.png",
+  },
+  {
     id: "g-latex-2026-1",
     title: "LaTeX Workshop 2026 - Group Photo",
     date: "August 14, 2026",

@@ -1,12 +1,12 @@
 ---
 title: "Call for Participants: IEEE ACEI 2026"
 date: "July 25, 2026"
-location: "Coming Soon"
+location: "Leapfrog Technology"
 category: "Competition"
-isUpcoming: true
-registrationUrl: "#"
+isUpcoming: false
+registrationUrl: ""
 description: "Start where ideas refuse to stay ideas!"
-thumbnail: "/events/yesist12-2026.png"
+thumbnail: "/events/acei-2026-the-venture.png"
 ---
 
 # Call for Participants: IEEE ACEI 2026
@@ -17,4 +17,4 @@ thumbnail: "/events/yesist12-2026.png"
 
 Connect. Compete. Excel. Start where ideas refuse to stay ideas!
 
-IEEE ACEI 2026 brings together innovators, developers, and aspiring founders to build groundbreaking solutions in Blockchain and Tech Entrepreneurship. Register your team and take your startup idea to the next level.
+IEEE ACEI 2026 brought together innovators, developers, and aspiring founders to build groundbreaking solutions in Blockchain and Tech Entrepreneurship.
